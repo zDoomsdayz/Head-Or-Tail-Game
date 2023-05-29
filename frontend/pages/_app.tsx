@@ -8,6 +8,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import MainLayout from "../layout/mainLayout";
 import { useRouter } from "next/router";
+import { Analytics } from '@vercel/analytics/react';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -49,6 +50,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       >
         <MainLayout>
           <Component {...pageProps} />
+          <Analytics />
         </MainLayout>
       </RainbowKitProvider>
     </WagmiConfig>
