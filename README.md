@@ -2,18 +2,18 @@
 
 ## Introduction
 
-The Head or Tail Betting Game is a decentralized application (DApp) built on a blockchain platform that allows users to place bets on the outcome of a coin toss. The game utilizes a smart contract to ensure fairness, transparency, and offers different odds and bonuses for the players.
+The Head or Tail Betting Game is a decentralized application (DApp) built on the `Sepolia testnet`, a blockchain platform, that allows users to place bets on the outcome of a coin toss. The game utilizes a smart contract to ensure fairness, transparency, and offers different odds and bonuses for the players.
 
 ## How it Works
 
 1. **Smart Contract Deployment**
 
-   - The smart contract for the game is deployed on the blockchain platform.
+   - The smart contract for the game is deployed on the Sepolia testnet.
    - The contract holds the game logic, manages the betting process, and includes the odds and bonus calculations.
 
 2. **Placing Bets**
 
-   - Users interact with the DApp's frontend to place their bets.
+   - Users interact with the DApp's frontend on the Sepolia testnet to place their bets.
    - Each user can choose to bet on either "Head" or "Tail" for the coin toss outcome.
    - Users specify the amount of cryptocurrency they want to bet.
 
@@ -38,21 +38,27 @@ The Head or Tail Betting Game is a decentralized application (DApp) built on a b
 
 6. **Automatic Payout**
 
-   - The smart contract automatically transfers the winnings, including any bonus amounts, to the winners' wallet addresses.
+   - The smart contract on the Sepolia testnet automatically transfers the winnings, including any bonus amounts, to the winners' wallet addresses.
    - Winners do not need to claim their winnings manually, as the smart contract handles the payout process.
 
-7. **Game Reset**
+7. **Changing RTP (Return to Player)**
 
-   - After the game is concluded, the smart contract resets the game state for the next round.
+   - Only the contract owner has the ability to change the RTP (Return to Player) for the game.
+   - The RTP determines the overall percentage of bets that will be returned to the players as winnings over time.
+   - The contract owner can adjust the RTP as needed to maintain a fair and balanced gameplay experience.
+
+8. **Game Reset**
+
+   - After the game is concluded, the smart contract on the Sepolia testnet resets the game state for the next round.
    - Users can participate in subsequent rounds by placing new bets.
 
 ## Advantages of Smart Contract
 
 - **Transparency**: The smart contract ensures transparency by providing a verifiable and auditable record of all bets, outcomes, odds, and bonuses.
-- **Security**: The use of blockchain technology and smart contracts eliminates the need for trust in a centralized authority, reducing the risk of fraud or manipulation.
-- **Automated Payouts**: The smart contract automatically calculates and distributes the winnings, including bonuses, to the winners, eliminating the need for manual intervention or claiming by the players.
-- **Immutable Rules**: The game rules defined in the smart contract cannot be changed, ensuring a fair and consistent gameplay experience.
+- **Security**: The use of blockchain technology and smart contracts on the Sepolia testnet eliminates the need for trust in a centralized authority, reducing the risk of fraud or manipulation.
+- **Automated Payouts**: The smart contract on the Sepolia testnet automatically calculates and distributes the winnings, including bonuses, to the winners, eliminating the need for manual intervention or claiming by the players.
+- **Immutable Rules**: The game rules defined in the smart contract on the Sepolia testnet cannot be changed, ensuring a fair and consistent gameplay experience.
 
 ## Conclusion
 
-The Head or Tail Betting Game is an innovative DApp that leverages the power of blockchain and smart contracts to provide a transparent and secure betting experience. By incorporating odds and bonuses and enabling automatic payouts, the game offers additional excitement and convenience for the players. Enjoy the decentralized and trustless gambling experience while taking advantage of the odds and bonus opportunities.
+The Head or Tail Betting Game is an innovative DApp that leverages the power of blockchain and smart contracts on the Sepolia testnet to provide a transparent and secure betting experience. By incorporating
