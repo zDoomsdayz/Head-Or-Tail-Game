@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	label {
+		@apply text-purple-400 flex flex-col mx-4 font-bold;
+	}
+
+	.play {
+		@apply font-bold m-10 w-32 h-20 bg-orange-700 text-white rounded-2xl p-2 shadow-lg;
+	}
+
+	.button {
+		@apply font-bold mt-10 w-full bg-orange-700 text-white rounded-2xl p-2 shadow-lg;
+	}
+
+	th {
+		@apply font-minecraft;
+	}
+
+	h1 {
+		@apply font-minecraft flex justify-center items-center font-bold;
+	}
+
+	p {
+		@apply font-minecraft flex justify-center items-center;
+	}
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,500;1,400&display=swap');
+
+@font-face {
+	font-family: minecraft;
+	src: url('/fonts/Minecraft.ttf');
+}
+
+html,
+body {
+	background-color: black;
+	font-family: 'Rubik';
+	font-weight: normal;
+}
+/*h1{
+	margin-bottom: 1rem;
+}
+h2{
+	margin-bottom: .5rem;
+	font-weight: normal;
+
+}
+
+p{
+	line-height: 1.5rem;
+	font-weight: lighter;
+	color: orange;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+	html {
+	}
+}*/

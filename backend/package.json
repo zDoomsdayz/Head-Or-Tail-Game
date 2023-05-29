@@ -1,0 +1,19 @@
+{
+	"name": "casino-game",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"build": "npx hardhat compile",
+		"deploy-testnet": "npx hardhat run ./scripts/Casino_deploy.js --network mumbai",
+		"deploy": "npx hardhat run ./scripts/Casino_deploy.js --network mumbai",
+		"node": "npx hardhat node"
+	},
+	"dependencies": {
+		"@openzeppelin/contracts": "^4.9.0",
+		"dotenv": "^16.0.2"
+	},
+	"devDependencies": {
+		"@nomicfoundation/hardhat-toolbox": "^2.0.0",
+		"hardhat": "^2.14.0"
+	}
+}
