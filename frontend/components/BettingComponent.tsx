@@ -113,7 +113,16 @@ const BettingComponent = () => {
 	const Tx = ({value}:any) => {
 		return <tr className={`${value.args.player == address ? "text-green-400" : "text-orange-400"}`}>
 			<td><Link href={`https://sepolia.etherscan.io/tx/${value.transactionHash}`} target="_blank"><p>#{value.args.gameId.toString()}</p></Link></td>
-			<td><Link href={`https://sepolia.etherscan.io/address/${value.args.player}`} target="_blank"><p>{value.args.player}</p></Link></td>
+			<td><Link href={`https://sepolia.etherscan.io/address/${value.args.player}`} target="_blank">
+				<p className="block md:hidden">
+					{value.args.player.slice(0,5)}...{value.args.player.slice(-5)}
+				</p>
+
+				<p className="hidden md:block">
+					{value.args.player}
+				</p>
+				</Link>
+			</td>
 			<td><p>{value.args.isHead? "Head": "Tail"}</p></td>
 			<td>{value.args.isWinner ? 
 			<p className="text-green-400">+ {utils.formatEther(ethers.BigNumber.from(value.args.amountWon))} ETH {value.args.bonus && "🔥"}</p>
