@@ -37,7 +37,7 @@ const BettingComponent = () => {
 
 	const retrievePastEvent = async() => {
 		const contract = GetContract();
-		const filterFrom = contract.filters.GameResult(null, null, null);
+		const filterFrom = contract.filters.GameResult(null, null);
 		const event = await contract.queryFilter(filterFrom);
 		setEventInfo([]);
 		event.forEach((i) => {
@@ -78,11 +78,21 @@ const BettingComponent = () => {
 			setLoading(true);
 			setBetType(isHead ? "Head" : "Tail");
 			const transaction = await contract.play(isHead,{ value: value.toString() });
-			const tx = await transaction.wait();
 
-			setIsWinner(tx.events[0].args.isWinner);
-			setLoading(false);
-			setWinAmount(utils.formatEther(ethers.BigNumber.from(tx.events[0].args.amountWon)));
+			const tx = await transaction.wait();
+			const requestID = tx.events[1].args.requestId.toString();
+
+			contract.once("GameResult", async()=>{
+				const filterFrom = contract.filters.GameResult(address, requestID);
+				const event = await contract.queryFilter(filterFrom) as any;
+
+				setIsWinner(event[0].args.isWinner);
+				setWinAmount(utils.formatEther(ethers.BigNumber.from(event[0].args.amountWon)));
+	
+				setLoading(false);
+			});
+
+
 		} catch (e) {
 			setBetType("");
 			setLoading(false);
