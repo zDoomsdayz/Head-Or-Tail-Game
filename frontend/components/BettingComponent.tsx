@@ -20,7 +20,6 @@ const BettingComponent = () => {
 	const [num, setNum] = useState(1);
 
 	const [firstLoadDone, setfirstLoad] = useState(false);
-
 	const [isUserConnected, setIsUserConnected] = useState(false);
 
 	useEffect(()=>{
