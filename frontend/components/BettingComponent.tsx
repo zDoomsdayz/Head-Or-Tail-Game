@@ -77,22 +77,17 @@ const BettingComponent = () => {
 			setOpenBetWindow(true);
 			setLoading(true);
 			setBetType(isHead ? "Head" : "Tail");
-			const transaction = await contract.play(isHead,{ value: value.toString() });
+			
+			const id = await contract.callStatic.play(isHead,{ value: value.toString() });
+			const filter = contract.filters.GameResult(address, id);
+			contract.once(filter, (player, requestId, gameCount, isWinner, betAmount, amountWon, bonusRound, result) => {
+				setIsWinner(isWinner);
+				setWinAmount(utils.formatEther(ethers.BigNumber.from(amountWon)));
 
-			const tx = await transaction.wait();
-			const requestID = tx.events[1].args.requestId.toString();
-
-			contract.once("GameResult", async()=>{
-				const filterFrom = contract.filters.GameResult(address, requestID);
-				const event = await contract.queryFilter(filterFrom) as any;
-
-				setIsWinner(event[0].args.isWinner);
-				setWinAmount(utils.formatEther(ethers.BigNumber.from(event[0].args.amountWon)));
-	
 				setLoading(false);
-			});
-
-
+			})
+			const transaction = await contract.play(isHead,{ value: value.toString() });
+			const tx = await transaction.wait();
 		} catch (e) {
 			setBetType("");
 			setLoading(false);
@@ -112,8 +107,8 @@ const BettingComponent = () => {
 
 	const Tx = ({value}:any) => {
 		return <tr className={`${value.args.player == address ? "text-green-400" : "text-orange-400"}`}>
-			<td><Link href={`https://sepolia.etherscan.io/tx/${value.transactionHash}`} target="_blank"><p>#{value.args.gameId.toString()}</p></Link></td>
-			<td><Link href={`https://sepolia.etherscan.io/address/${value.args.player}`} target="_blank">
+			<td><Link href={`https://mumbai.polygonscan.com/tx/${value.transactionHash}`} target="_blank"><p>#{value.args.gameId.toString()}</p></Link></td>
+			<td><Link href={`https://mumbai.polygonscan.com/address/${value.args.player}`} target="_blank">
 				<p className="block md:hidden">
 					{value.args.player.slice(0,5)}...{value.args.player.slice(-5)}
 				</p>
@@ -125,8 +120,8 @@ const BettingComponent = () => {
 			</td>
 			<td><p>{value.args.isHead? "Head": "Tail"}</p></td>
 			<td>{value.args.isWinner ? 
-			<p className="text-green-400">+ {utils.formatEther(ethers.BigNumber.from(value.args.amountWon))} ETH {value.args.bonus && "🔥"}</p>
-			:<p className="text-red-400">- {utils.formatEther(ethers.BigNumber.from(value.args.betAmount))} ETH</p>}</td>
+			<p className="text-green-400">+ {utils.formatEther(ethers.BigNumber.from(value.args.amountWon))} MATIC {value.args.bonus && "🔥"}</p>
+			:<p className="text-red-400">- {utils.formatEther(ethers.BigNumber.from(value.args.betAmount))} MATIC</p>}</td>
 			
 		</tr>
 	}
@@ -157,7 +152,7 @@ const BettingComponent = () => {
 					</button>
 
 					<div className="bg-slate-700 rounded-2xl w-48 h-10 font-minecraft items-center justify-center flex">
-					{`x${num} ( ${num * 0.01} ETH )`}
+					{`x${num} ( ${num * 0.01} MATIC )`}
 					</div>
 
 					<button
@@ -183,7 +178,7 @@ const BettingComponent = () => {
 
 							{isError? <p className="text-red-500">Transaction Error, Please Try Again</p> 
 							: isWinner ? 
-							<p className="text-green-500">You Won {winAmount} ETH</p>
+							<p className="text-green-500">You Won {winAmount} MATIC</p>
 							:<p className="text-yellow-500">Too Bad</p>
 							}
 

@@ -28,7 +28,7 @@ async function main() {
 
   console.log("Account balance:", await ethers.utils.formatEther(weiAmount));
 
-  const selectedNetwork = getSepoliaConfig();
+  const selectedNetwork = getMaticMumbaiConfig();
   const Contract = await ethers.getContractFactory("HeadOrTailGame");
 
   const depositAmount = ethers.utils.parseUnits("0.2", "ether");

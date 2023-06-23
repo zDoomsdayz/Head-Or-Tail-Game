@@ -11,7 +11,9 @@ const GetContract = () => {
 	const v4 = '0xb97aA2A0Ca589a1f7078FD996A97B2E9Fb21968c';
 
 	const v5 = '0x05B698C46a2dfC9c9eEB1Fd305fB7c6EC46d0C8D';
-	return new Contract(v5, artifact.abi, signer);
+
+	const polygon = '0x739AFe725616459CB4ab5922A48fECaA1031B4E5';
+	return new Contract(polygon, artifact.abi, signer);
 }
 
 export default GetContract;
