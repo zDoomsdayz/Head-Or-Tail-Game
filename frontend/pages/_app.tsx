@@ -3,7 +3,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import type { AppProps } from 'next/app';
 import { configureChains, createConfig, useAccount, WagmiConfig } from 'wagmi';
-import { mainnet, sepolia} from 'wagmi/chains';
+import { mainnet, sepolia, pulsechain, pulsechainV4} from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import MainLayout from "../layout/mainLayout";
@@ -12,8 +12,7 @@ import { Analytics } from '@vercel/analytics/react';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
-    mainnet,
-    sepolia,
+    pulsechain,
   ],
   [
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY as string }),
@@ -22,7 +21,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({
-  appName: 'Head Or Tail',
+  appName: 'Pulse Space Apes dApp',
   projectId: 'YOUR_PROJECT_ID',
   chains,
 });
@@ -45,7 +44,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider 
         modalSize="compact"
-        initialChain={sepolia}
+        initialChain={pulsechain}
         chains={chains}
       >
         <MainLayout>

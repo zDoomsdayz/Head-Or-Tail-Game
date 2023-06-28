@@ -8,11 +8,11 @@
 	}
 
 	.play {
-		@apply font-bold m-10 w-32 h-20 bg-orange-700 text-white rounded-2xl p-2 shadow-lg;
+		@apply font-bold m-10 w-28 h-20 bg-teal-500 text-black rounded-2xl p-2 shadow-lg;
 	}
 
 	.button {
-		@apply font-bold mt-10 w-full bg-orange-700 text-white rounded-2xl p-2 shadow-lg;
+		@apply font-bold mt-10 w-full bg-teal-500 text-white rounded-2xl p-2 shadow-lg;
 	}
 
 	th {

@@ -1,17 +1,40 @@
-
-
 .navbar {
+	font-family: minecraft;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding: 2rem 1rem 0.8rem 1rem;
 	width: 100%;
-	padding: 2rem 4rem 0.8rem 4rem;
-	gap: 2rem;
-	margin-bottom: 4rem;
 }
 
+.navItems {
+	display: flex;
+	gap: 1rem;
+}
 
-.alchemy_logo{
-	width: 6rem;
-	cursor: pointer;
+.navItems a {
+	color: white;
+	text-decoration: none;
+	font-weight: 700;
+	font-size: 18px;
+	line-height: 24px;
+}
+
+.navItems a:hover {
+	color: #14b8a6;
+}
+
+@media (min-width: 768px) {
+	.navbar {
+		padding: 2rem 4rem 0.8rem 4rem;
+	}
+
+	.navItems {
+		gap: 2rem;
+	}
+
+	.navItems a {
+		font-size: 20px;
+		line-height: 28px;
+	}
 }

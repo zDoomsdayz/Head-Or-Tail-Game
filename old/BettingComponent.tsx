@@ -5,6 +5,35 @@ import { useAccount } from "wagmi";
 import Link from 'next/link';
 import Footer from "./Footer";
 import GetContract from "./Contract";
+import GetPEPEContract from "./Contract"; 
+
+const PEPE_CONTRACT = '0x6982508145454ce325ddbe47a25d4ec3d2311933';
+const PEPE_ABI = [
+	{
+	  "constant": false,
+	  "inputs": [
+		{
+		  "name": "_spender",
+		  "type": "address"
+		},
+		{
+		  "name": "_value",
+		  "type": "uint256"
+		}
+	  ],
+	  "name": "approve",
+	  "outputs": [
+		{
+		  "name": "",
+		  "type": "bool"
+		}
+	  ],
+	  "payable": false,
+	  "stateMutability": "nonpayable",
+	  "type": "function"
+	}
+  ];
+  
 
 const BettingComponent = () => {
 	const { address, isConnected } = useAccount();
@@ -17,7 +46,7 @@ const BettingComponent = () => {
 	const [isError, setError] = useState(false);
 	const [winAmount, setWinAmount] = useState("");
 	const [betType, setBetType] = useState("");
-	const [num, setNum] = useState(1);
+	const [num, setNum] = useState(250000000);
 
 	const [firstLoadDone, setfirstLoad] = useState(false);
 
@@ -72,12 +101,18 @@ const BettingComponent = () => {
 
 		try {
 			const contract = GetContract();
-			const value = utils.parseEther((num * 0.01).toString());
+			const pepeContract = GetPEPEContract();
+			//const value = utils.parseEther(num.toString());
+			const value = num.toString();
+
+			const approvalTx = await pepeContract.approve(contract.address, value);
+    		await approvalTx.wait();
+			console.log("Approved Bet Value: ", value, " $PEPE")
 
 			setOpenBetWindow(true);
 			setLoading(true);
 			setBetType(isHead ? "Head" : "Tail");
-			const transaction = await contract.play(isHead,{ value: value.toString() });
+			const transaction = await contract.play(isHead);
 			const tx = await transaction.wait();
 
 			setIsWinner(tx.events[0].args.isWinner);
@@ -102,16 +137,32 @@ const BettingComponent = () => {
 
 	const Tx = ({value}:any) => {
 		return <tr className={`${value.args.player == address ? "text-green-400" : "text-orange-400"}`}>
-			<td><Link href={`https://sepolia.etherscan.io/tx/${value.transactionHash}`} target="_blank"><p>#{value.args.gameId.toString()}</p></Link></td>
-			<td><Link href={`https://sepolia.etherscan.io/address/${value.args.player}`} target="_blank"><p>{value.args.player}</p></Link></td>
+			<td><Link href={`https://scan.v4.testnet.pulsechain.com/tx/${value.transactionHash}`} target="_blank"><p>#{value.args.gameId.toString()}</p></Link></td>
+			<td><Link href={`https://scan.v4.testnet.pulsechain.com/address/${value.args.player}`} target="_blank"><p>{value.args.player}</p></Link></td>
 			<td><p>{value.args.isHead? "Head": "Tail"}</p></td>
 			<td>{value.args.isWinner ? 
-			<p className="text-green-400">+ {utils.formatEther(ethers.BigNumber.from(value.args.amountWon))} ETH {value.args.bonus && "🔥"}</p>
-			:<p className="text-red-400">- {utils.formatEther(ethers.BigNumber.from(value.args.betAmount))} ETH</p>}</td>
+			<p className="text-green-400">+ {utils.formatEther(ethers.BigNumber.from(value.args.amountWon))} PEPE {value.args.bonus && "🔥"}</p>
+			:<p className="text-red-400">- {utils.formatEther(ethers.BigNumber.from(value.args.betAmount))} PEPE</p>}</td>
 			
 		</tr>
 	}
 
+	const values = [250000000, 500000000, 1000000000, 10000000000];
+
+	const incNum = () => {
+	const currentIndex = values.indexOf(num);
+	if (currentIndex < values.length - 1) {
+		setNum(values[currentIndex + 1]);
+	}
+	};
+
+	const decNum = () => {
+	const currentIndex = values.indexOf(num);
+	if (currentIndex > 0) {
+		setNum(values[currentIndex - 1]);
+	}
+	};
+	/*
 	const incNum = () => {
 		if (num < 5) {
 		  setNum(Number(num) + 1);
@@ -122,12 +173,12 @@ const BettingComponent = () => {
 			setNum(num - 1);
 		}
 	};
-
+	*/
 	return (
 		firstLoadDone ? isUserConnected?
 		<div className={styles.container}>
 			<header className={styles.header_container} >
-				<h1>- Head Or Tail -</h1>
+				<h1>- Heads Or Tails -</h1>
 
 				<div className="flex flex-row gap-4 justify-between items-center">
 					<button
@@ -138,7 +189,8 @@ const BettingComponent = () => {
 					</button>
 
 					<div className="bg-slate-700 rounded-2xl w-48 h-10 font-minecraft items-center justify-center flex">
-					{`x${num} ( ${num * 0.01} ETH )`}
+					{` ( ${num.toLocaleString()} PEPE )`}
+					
 					</div>
 
 					<button
@@ -164,7 +216,7 @@ const BettingComponent = () => {
 
 							{isError? <p className="text-red-500">Transaction Error, Please Try Again</p> 
 							: isWinner ? 
-							<p className="text-green-500">You Won {winAmount} ETH</p>
+							<p className="text-green-500">You Won {winAmount} PEPE</p>
 							:<p className="text-yellow-500">Too Bad</p>
 							}
 

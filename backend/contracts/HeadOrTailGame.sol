@@ -2,8 +2,20 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+interface R {
+    function getRandomNumber() external view returns (uint256);
+}
+  
+
 
 contract HeadOrTailGame is Ownable {
+
+    address private PEPE;
+    IERC20 pepe = IERC20(PEPE);
+    R private _random;
+    
     uint256 private gameCount;
 
     uint256 private rtp;
@@ -17,19 +29,23 @@ contract HeadOrTailGame is Ownable {
     
     event GameResult(address indexed player, uint indexed gameId, bool indexed isWinner, uint betAmount, uint amountWon, bool bonus, bool isHead);
     
-    constructor() {
+    constructor(address _PEPE, address _rand) {
+        _random = R(_rand);
         rtp = 17;
         bonus = 22;
         gameCount = 0;
         bonusRate = 4;
-        allowedBetAmounts = [0.01 ether, 0.02 ether, 0.03 ether, 0.04 ether, 0.05 ether];
+        allowedBetAmounts = [250000000, 500000000, 1000000000, 10000000000];
+        PEPE = _PEPE;
     }
     
-    function play(bool choice) external payable {
-        require(isAllowedBetAmount(msg.value), "Please send correct amount to play the game.");
-        require(multiply(msg.value, DECIMALS * bonus / 10) < address(this).balance, "We have gone bankrupt.");
-        
-        uint256 randomNumber = getRandomNumber();
+    function play(uint256 betAmount, bool choice) external  {
+        require(isAllowedBetAmount(betAmount), "Invalid bet amount");
+        require(pepe.allowance(msg.sender, address(this)) >= betAmount, "Insufficient allowance. Please approve the correct amount.");
+        require(pepe.balanceOf(msg.sender) >= betAmount, "Insufficient balance");
+
+
+        uint256 randomNumber = _random.getRandomNumber();
 
         bool result = randomNumber % 2 == 0;
         bool isWinner = (result == choice);
@@ -39,15 +55,15 @@ contract HeadOrTailGame is Ownable {
         uint256 amountWon = 0;
 
         if (isWinner) {
-            amountWon = multiply(msg.value, DECIMALS *  (bonusRound ? bonus : rtp ) / 10);
-            if (amountWon > address(this).balance) {
-                amountWon = address(this).balance;
+            amountWon = multiply(betAmount, (bonusRound ? bonus : rtp));
+            if (amountWon > pepe.balanceOf(address(this))) {
+                amountWon = pepe.balanceOf(address(this));
             }
-            payable(msg.sender).transfer(amountWon);
-        } 
-        
+            pepe.transferFrom(msg.sender, address(this), amountWon);
+        }
+
         gameCount++;
-        emit GameResult(msg.sender, gameCount, isWinner, msg.value, amountWon, bonusRound, result);
+        emit GameResult(msg.sender, gameCount, isWinner, betAmount, amountWon, bonusRound, result);
     }
 
     function withdrawFunds() public onlyOwner {
@@ -55,12 +71,18 @@ contract HeadOrTailGame is Ownable {
         payable(owner()).transfer(address(this).balance);
     }
 
-    function getBalance() public view returns (uint256) {
-        return address(this).balance;
+    function withdrawPEPE() public onlyOwner {
+        require(pepe.balanceOf(address(this)) > 0, "Contract balance is empty.");
+        pepe.transfer(owner(), pepe.balanceOf(address(this)));
     }
 
-    function topUpBalance() public payable onlyOwner {
-        require(msg.value > 0, "Invalid top-up amount");
+    function getBalance() public view returns (uint256) {
+        return pepe.balanceOf(address(this));
+    }
+
+    function addLiquidity(uint256 amount) public onlyOwner {
+        require(amount > 0, "Invalid top-up amount");
+        erc20Token.transferFrom(owner(), address(this), amount);
     }
 
     function getRtp() public view returns (uint256) {
@@ -89,6 +111,10 @@ contract HeadOrTailGame is Ownable {
 
     function getTotalTail() public view returns (uint256) {
         return totalTail;
+    }
+
+    function getPEPE() public view returns (address) {
+        return PEPE;
     }
 
     function getRandomNumber() private view returns (uint256) {
